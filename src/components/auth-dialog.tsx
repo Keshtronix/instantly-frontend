@@ -25,6 +25,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
+import { useState } from "react";
+import { MailCheckIcon } from "lucide-react";
+
 const loginSchema = z.object({
   email: z.string().trim().email("Enter a valid email address"),
   password: z.string().trim().min(1, "Password is required"),
@@ -42,6 +45,10 @@ export const AuthDialog = () => {
 
   const fetchCart = useCart((state) => state.fetchCart);
 
+  // NEW: track successful registration + the email used
+  const [isRegistered, setIsRegistered] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState("");
+
   // Login Mutation
   const loginMutation = useMutation({
     mutationFn: loginMutationFn,
@@ -55,7 +62,7 @@ export const AuthDialog = () => {
       toast.error(
         error?.response?.data?.message ||
           error?.message ||
-          "Unable to login. Try again."
+          "Unable to login. Try again.",
       );
     },
   });
@@ -63,17 +70,21 @@ export const AuthDialog = () => {
   // Register Mutation
   const registerMutation = useMutation({
     mutationFn: registerMutationFn,
-    onSuccess: async () => {
-      await queryClient.invalidateQueries({ queryKey: ["current-user"] });
-      await fetchCart();
-      toast.success("Successfully registered!");
-      closeAuth();
+    onSuccess: async (_data, variables) => {
+      // await queryClient.invalidateQueries({ queryKey: ["current-user"] });
+      // await fetchCart();
+      // toast.success("Successfully registered!");
+      // closeAuth();
+
+      // Don't invalidate/fetchCart/closeAuth yet — user isn't verified/logged in
+      setRegisteredEmail(variables.email);
+      setIsRegistered(true);
     },
     onError: (error: any) => {
       toast.error(
         error?.response?.data?.message ||
           error?.message ||
-          "Unable to create account. Try again."
+          "Unable to create account. Try again.",
       );
     },
   });
@@ -104,162 +115,197 @@ export const AuthDialog = () => {
     registerMutation.mutate(values);
   };
 
+  // Reset the success state whenever the dialog closes or view changes
+  const handleOpenChange = (open: boolean) => {
+    if (!open) {
+      closeAuth();
+      setIsRegistered(false);
+      registerForm.reset();
+    }
+  };
+
   return (
-    <Dialog open={isAuthOpen} onOpenChange={(open) => !open && closeAuth()}>
+    // <Dialog open={isAuthOpen} onOpenChange={(open) => !open && closeAuth()}>
+    <Dialog open={isAuthOpen} onOpenChange={handleOpenChange}>
       <DialogContent key={view} className="sm:max-w-md py-8 px-8">
-        <DialogHeader className="flex flex-col items-center justify-center gap-1">
-          <Logo />
-          <DialogTitle className="text-2xl font-semibold tracking-tight">
-            {view === "login" ? "Sign in to your account" : "Create your account"}
-          </DialogTitle>
-        </DialogHeader>
-
-        {view === "login" ? (
-          <Form {...loginForm}>
-            <form
-              onSubmit={loginForm.handleSubmit(onLoginSubmit)}
-              className="space-y-4 py-2"
+        {isRegistered ? (
+          <div className="flex flex-col items-center justify-center gap-2 py-6">
+            <MailCheckIcon size={48} className="animate-bounce" />
+            <h2 className="text-xl font-bold">Check your email</h2>
+            <p className="mb-2 text-center text-sm text-muted-foreground">
+              We just sent a verification link to {registeredEmail}.
+            </p>
+            <Button
+              className="h-[40px]"
+              onClick={() => {
+                setIsRegistered(false);
+                setView("login");
+              }}
             >
-              <FormField
-                control={loginForm.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="name@example.com"
-                        type="email"
-                        autoComplete="email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={loginForm.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        autoComplete="current-password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full bg-green-light! text-white"
-                disabled={loginMutation.isPending}
-              >
-                {loginMutation.isPending ? "Signing in..." : "Sign in"}
-              </Button>
-
-              <p className="text-sm text-muted-foreground text-center">
-                Don&apos;t have an account?{" "}
-                <button
-                  type="button"
-                  onClick={() => setView("register")}
-                  className="font-medium text-foreground underline underline-offset-4 cursor-pointer"
-                >
-                  Sign up
-                </button>
-              </p>
-            </form>
-          </Form>
+              Go to login
+            </Button>
+          </div>
         ) : (
-          <Form {...registerForm}>
-            <form
-              onSubmit={registerForm.handleSubmit(onRegisterSubmit)}
-              className="space-y-4 py-2"
-            >
-              <FormField
-                control={registerForm.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Your name"
-                        autoComplete="name"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+          <>
+            <DialogHeader className="flex flex-col items-center justify-center gap-1">
+              <Logo />
+              <DialogTitle className="text-2xl font-semibold tracking-tight">
+                {view === "login"
+                  ? "Sign in to your account"
+                  : "Create your account"}
+              </DialogTitle>
+            </DialogHeader>
 
-              <FormField
-                control={registerForm.control}
-                name="email"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Email</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="name@example.com"
-                        type="email"
-                        autoComplete="email"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={registerForm.control}
-                name="password"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Password</FormLabel>
-                    <FormControl>
-                      <Input
-                        type="password"
-                        autoComplete="new-password"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-
-              <Button
-                type="submit"
-                size="lg"
-                className="w-full bg-green-light! text-white"
-                disabled={registerMutation.isPending}
-              >
-                {registerMutation.isPending ? "Creating account..." : "Create account"}
-              </Button>
-
-              <p className="text-sm text-muted-foreground text-center">
-                Already have an account?{" "}
-                <button
-                  type="button"
-                  onClick={() => setView("login")}
-                  className="font-medium text-foreground underline underline-offset-4 cursor-pointer"
+            {view === "login" ? (
+              <Form {...loginForm}>
+                <form
+                  onSubmit={loginForm.handleSubmit(onLoginSubmit)}
+                  className="space-y-4 py-2"
                 >
-                  Sign in
-                </button>
-              </p>
-            </form>
-          </Form>
+                  <FormField
+                    control={loginForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="name@example.com"
+                            type="email"
+                            autoComplete="email"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={loginForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            autoComplete="current-password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full bg-green-light! text-white"
+                    disabled={loginMutation.isPending}
+                  >
+                    {loginMutation.isPending ? "Signing in..." : "Sign in"}
+                  </Button>
+
+                  <p className="text-sm text-muted-foreground text-center">
+                    Don&apos;t have an account?{" "}
+                    <button
+                      type="button"
+                      onClick={() => setView("register")}
+                      className="font-medium text-foreground underline underline-offset-4 cursor-pointer"
+                    >
+                      Sign up
+                    </button>
+                  </p>
+                </form>
+              </Form>
+            ) : (
+              <Form {...registerForm}>
+                <form
+                  onSubmit={registerForm.handleSubmit(onRegisterSubmit)}
+                  className="space-y-4 py-2"
+                >
+                  <FormField
+                    control={registerForm.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Your name"
+                            autoComplete="name"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={registerForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="name@example.com"
+                            type="email"
+                            autoComplete="email"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={registerForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="password"
+                            autoComplete="new-password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full bg-green-light! text-white"
+                    disabled={registerMutation.isPending}
+                  >
+                    {registerMutation.isPending
+                      ? "Creating account..."
+                      : "Create account"}
+                  </Button>
+
+                  <p className="text-sm text-muted-foreground text-center">
+                    Already have an account?{" "}
+                    <button
+                      type="button"
+                      onClick={() => setView("login")}
+                      className="font-medium text-foreground underline underline-offset-4 cursor-pointer"
+                    >
+                      Sign in
+                    </button>
+                  </p>
+                </form>
+              </Form>
+            )}
+          </>
         )}
       </DialogContent>
     </Dialog>
