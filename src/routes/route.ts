@@ -1,4 +1,5 @@
 import AccountAddressesPage from "@/pages/account/addresses";
+import AccountProfilePage from "@/pages/account/profile";
 import AccountReviewsPage from "@/pages/account/reviews";
 import CheckoutPage from "@/pages/checkout";
 import HomePage from "@/pages/home";
@@ -12,33 +13,30 @@ import AdminOrdersPage from "@/pages/admin/orders";
 import AdminProductsPage from "@/pages/admin/products";
 import AdminNewProductPage from "@/pages/admin/new-product";
 
-
 // export const AUTH_ROUTES = {
 //   SIGN_IN: '/',
 //   SIGN_UP: '/',
 // };
 
-
 export const PUBLIC_ROUTES = {
-  HOME: '/',
-  PRODUCTS: '/products',
-  PRODUCT_DETAIL: '/products/:slug',
-  SEARCH_RESULTS: '/search-results',
+  HOME: "/",
+  PRODUCTS: "/products",
+  PRODUCT_DETAIL: "/products/:slug",
+  SEARCH_RESULTS: "/search-results",
 };
-
 
 export const PROTECTED_ROUTES = {
-  CHECKOUT: '/checkout',
-  ORDERS: '/orders',
-  ORDER_TRACKING: '/orders/:orderId',
-  ACCOUNT_REVIEWS: '/account/reviews',
-  ACCOUNT_ADDRESSES: '/account/addresses',
-  ADMIN_DASHBOARD: '/admin',
-  ADMIN_ORDERS: '/admin/orders',
-  ADMIN_PRODUCTS: '/admin/products',
-  ADMIN_PRODUCTS_NEW: '/admin/products/new',
+  CHECKOUT: "/checkout",
+  ORDERS: "/orders",
+  ORDER_TRACKING: "/orders/:orderId",
+  ACCOUNT_REVIEWS: "/account/reviews",
+  ACCOUNT_ADDRESSES: "/account/addresses",
+  ACCOUNT_PROFILE: "/account/profile",
+  ADMIN_DASHBOARD: "/admin",
+  ADMIN_ORDERS: "/admin/orders",
+  ADMIN_PRODUCTS: "/admin/products",
+  ADMIN_PRODUCTS_NEW: "/admin/products/new",
 };
-
 
 // export const authRouthsPaths: Array<{ path: string; element: React.ComponentType }> = [];
 
@@ -85,9 +83,13 @@ export const protectedRoutesPaths = [
     path: PROTECTED_ROUTES.ACCOUNT_ADDRESSES,
     element: AccountAddressesPage,
     account: true,
-  }
+  },
+  {
+    path: PROTECTED_ROUTES.ACCOUNT_PROFILE,
+    element: AccountProfilePage,
+    account: true,
+  },
 ];
-
 
 export const adminRoutesPaths = [
   {
@@ -107,4 +109,3 @@ export const adminRoutesPaths = [
     element: AdminNewProductPage,
   },
 ];
-

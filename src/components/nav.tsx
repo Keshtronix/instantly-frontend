@@ -1,10 +1,6 @@
 import CartButton from "@/components/cart-button";
 import Logo from "@/components/logo";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,7 +18,15 @@ import {
 import { logoutMutationFn } from "@/lib/api";
 import { PROTECTED_ROUTES, PUBLIC_ROUTES } from "@/routes/route";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { LayoutDashboard, LogOut, MapPin, MessageSquareText, Package, Search, UserRound } from "lucide-react";
+import {
+  LayoutDashboard,
+  LogOut,
+  MapPin,
+  MessageSquareText,
+  Package,
+  Search,
+  UserRound,
+} from "lucide-react";
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -57,7 +61,7 @@ const Nav = () => {
     },
     onError: (error: any) => {
       toast.error(error?.message || "Failed to log out");
-    }
+    },
   });
 
   const navigateToSearch = (value: string) => {
@@ -66,7 +70,7 @@ const Nav = () => {
     navigate(
       query
         ? `${PUBLIC_ROUTES.SEARCH_RESULTS}?q=${encodeURIComponent(query)}`
-        : PUBLIC_ROUTES.SEARCH_RESULTS
+        : PUBLIC_ROUTES.SEARCH_RESULTS,
     );
   };
 
@@ -119,11 +123,19 @@ const Nav = () => {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-59 py-4">
               <DropdownMenuLabel>
-                <span className="block truncate text-foreground">{user.name}</span>
+                <span className="block truncate text-foreground">
+                  {user.name}
+                </span>
                 <span className="block truncate font-normal">{user.email}</span>
               </DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuGroup className="space-y-2">
+                <DropdownMenuItem asChild>
+                  <Link to={PROTECTED_ROUTES.ACCOUNT_PROFILE}>
+                    <UserRound />
+                    My Profile
+                  </Link>
+                </DropdownMenuItem>
                 <DropdownMenuItem asChild>
                   <Link to={PROTECTED_ROUTES.ORDERS}>
                     <Package />

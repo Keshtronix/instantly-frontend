@@ -11,6 +11,11 @@ import {
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 
 const accountNavItems = [
+    {
+    label: "Profile",
+    to: "/account/profile",
+    icon: ReceiptText,
+  },
   {
     label: "Order history",
     to: "/orders",

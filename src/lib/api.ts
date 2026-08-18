@@ -1,4 +1,4 @@
-import type { AuthResponse, LoginType, RegisterType, CreateAddressInput, AddressResponse, GetAddressesResponse } from "@/types/auth.type";
+import type { AuthResponse, LoginType, RegisterType,UpdateProfileInput, CreateAddressInput, AddressResponse, GetAddressesResponse } from "@/types/auth.type";
 import type { CreateOrderInput, CreateOrderResponse, GetOrdersResponse, GetOrderByIdResponse } from "@/types/order.type";
 import API from "./axios-client";
 import type { CategoryResponseType } from "@/types/categories.type";
@@ -214,5 +214,9 @@ export const generateProductAiMutationFn = async (data: {
 
 
 
-
+// brocky
+export const updateProfileMutationFn = async (data: UpdateProfileInput): Promise<AuthResponse> => {
+    const response = await API.put<AuthResponse>("/auth/profile", data);
+    return response.data;
+};
 
