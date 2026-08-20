@@ -94,6 +94,12 @@ export const createAddressMutationFn = async (data: CreateAddressInput): Promise
     return response.data;
 };
 
+// brocky
+export const deleteAddressMutationFn = async (addressId: string): Promise<{ message: string }> => {
+    const response = await API.delete<{ message: string }>(`/addresses/${addressId}`);
+    return response.data;
+}
+
 export const createOrderMutationFn = async (data: CreateOrderInput): Promise<CreateOrderResponse> => {
     const response = await API.post<CreateOrderResponse>("/orders", data);
     return response.data;

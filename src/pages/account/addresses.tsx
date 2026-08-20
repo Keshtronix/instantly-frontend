@@ -26,17 +26,18 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import {
-  addressSchema,
-  type AddressFormValues,
-} from "@/constants/address";
+import { addressSchema, type AddressFormValues } from "@/constants/address";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Skeleton } from "@/components/ui/skeleton";
-import { MapPin, Plus } from "lucide-react";
+import { MapPin, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { getAddressesQueryFn, createAddressMutationFn } from "@/lib/api";
+import {
+  getAddressesQueryFn,
+  createAddressMutationFn,
+  deleteAddressMutationFn,
+} from "@/lib/api";
 import { toast } from "sonner";
 
 const AccountAddressesPage = () => {
@@ -46,19 +47,19 @@ const AccountAddressesPage = () => {
     queryKey: ["addresses"],
     queryFn: getAddressesQueryFn,
   });
-  
+
   const addresses = data?.addresses || [];
 
   const form = useForm<AddressFormValues>({
     resolver: zodResolver(addressSchema),
     defaultValues: {
-        recipientName: "",
-        phone: "",
-        street: "",
-        city: "",
-        state: "",
-        postalCode: "",
-        country: "",
+      recipientName: "",
+      phone: "",
+      street: "",
+      city: "",
+      state: "",
+      postalCode: "",
+      country: "",
     },
   });
 
@@ -75,7 +76,17 @@ const AccountAddressesPage = () => {
     },
   });
 
- 
+  // inside the component, alongside createAddressMutation
+  const deleteAddressMutation = useMutation({
+    mutationFn: deleteAddressMutationFn,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["addresses"] });
+      toast.success("Address removed");
+    },
+    onError: (error: any) => {
+      toast.error(error?.message || "Failed to delete address");
+    },
+  });
 
   const handleSubmit = (values: AddressFormValues) => {
     createAddressMutation.mutate(values);
@@ -100,7 +111,9 @@ const AccountAddressesPage = () => {
           </DialogTrigger>
           <DialogContent className="sm:max-w-xl">
             <DialogHeader>
-              <DialogTitle className="text-lg">Add delivery address</DialogTitle>
+              <DialogTitle className="text-lg">
+                Add delivery address
+              </DialogTitle>
               <DialogDescription className="-mt-2">
                 Save a delivery address to use during checkout.
               </DialogDescription>
@@ -146,7 +159,10 @@ const AccountAddressesPage = () => {
                     <FormItem>
                       <FormLabel>Street address</FormLabel>
                       <FormControl>
-                        <Input placeholder="214 Green Market Avenue" {...field} />
+                        <Input
+                          placeholder="214 Green Market Avenue"
+                          {...field}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -210,8 +226,15 @@ const AccountAddressesPage = () => {
                 />
 
                 <DialogFooter>
-                  <Button size="lg" className="px-4" type="submit" disabled={createAddressMutation.isPending}>
-                    {createAddressMutation.isPending ? "Saving..." : "Save address"}
+                  <Button
+                    size="lg"
+                    className="px-4"
+                    type="submit"
+                    disabled={createAddressMutation.isPending}
+                  >
+                    {createAddressMutation.isPending
+                      ? "Saving..."
+                      : "Save address"}
                   </Button>
                 </DialogFooter>
               </form>
@@ -250,7 +273,7 @@ const AccountAddressesPage = () => {
                 key={address._id}
                 className={cn(
                   "bg-background shadow-xs",
-                  isSelected && "ring-1 ring-primary"
+                  isSelected && "ring-1 ring-primary",
                 )}
               >
                 <CardContent className="flex h-full flex-col gap-4 p-4">
@@ -266,15 +289,27 @@ const AccountAddressesPage = () => {
                         {address.recipientName} - {address.phone}
                       </span>
                       <span className="text-sm text-muted-foreground">
-                        {address.city}, {address.state}, {address.postalCode}, {address.country}
+                        {address.city}, {address.state}, {address.postalCode},{" "}
+                        {address.country}
                       </span>
                     </span>
                   </div>
 
                   <div className="flex items-center justify-between gap-3 border-t border-border pt-3">
                     <span className="text-xs font-medium text-muted-foreground">
-                      {isSelected ? "Default delivery address" : "Saved address"}
+                      {isSelected
+                        ? "Default delivery address"
+                        : "Saved address"}
                     </span>
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      className="h-8 px-2 text-muted-foreground hover:text-destructive"
+                      disabled={deleteAddressMutation.isPending}
+                      onClick={() => deleteAddressMutation.mutate(address._id)}
+                    >
+                      <Trash2 className="size-4" />
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
