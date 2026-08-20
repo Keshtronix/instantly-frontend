@@ -12,6 +12,7 @@ import AdminDashboardPage from "@/pages/admin/dashboard";
 import AdminOrdersPage from "@/pages/admin/orders";
 import AdminProductsPage from "@/pages/admin/products";
 import AdminNewProductPage from "@/pages/admin/new-product";
+import WishlistPage from "@/pages/account/wishlist";
 
 // export const AUTH_ROUTES = {
 //   SIGN_IN: '/',
@@ -31,6 +32,7 @@ export const PROTECTED_ROUTES = {
   ORDER_TRACKING: "/orders/:orderId",
   ACCOUNT_REVIEWS: "/account/reviews",
   ACCOUNT_ADDRESSES: "/account/addresses",
+  WISHLIST: "/account/wishlist",
   ACCOUNT_PROFILE: "/account/profile",
   ADMIN_DASHBOARD: "/admin",
   ADMIN_ORDERS: "/admin/orders",
@@ -87,6 +89,11 @@ export const protectedRoutesPaths = [
   {
     path: PROTECTED_ROUTES.ACCOUNT_PROFILE,
     element: AccountProfilePage,
+    account: true,
+  },
+    {
+    path: PROTECTED_ROUTES.WISHLIST,
+    element: WishlistPage,
     account: true,
   },
 ];

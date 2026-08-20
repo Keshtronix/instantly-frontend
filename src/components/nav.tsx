@@ -34,6 +34,7 @@ import { ModeToggle } from "./mode-toggle";
 import { useUser } from "@/hooks/use-user";
 import { useAuth } from "@/hooks/use-auth";
 import { useCart } from "@/hooks/use-cart";
+import WishlistNavButton from "@/components/wishlist-nav-button";
 
 import { toast } from "sonner";
 
@@ -100,6 +101,9 @@ const Nav = () => {
         </form>
 
         <ModeToggle />
+        {user ? <WishlistNavButton /> : null}
+
+        <CartButton />
         {user ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -189,8 +193,6 @@ const Nav = () => {
             </span>
           </button>
         )}
-
-        <CartButton />
       </div>
     </header>
   );

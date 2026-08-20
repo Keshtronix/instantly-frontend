@@ -20,6 +20,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getProductBySlugQueryFn, getProductReviewsQueryFn } from "@/lib/api";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "@/components/ui/skeleton";
+import {WishlistButton} from "@/components/wishlist-button";
 
 const ProductDetailPage = () => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const ProductDetailPage = () => {
     queryFn: () => getProductBySlugQueryFn(slug!),
     enabled: !!slug,
   });
-  
+
   const { data: reviewsData, isLoading: isReviewsLoading } = useQuery({
     queryKey: ["product-reviews", slug],
     queryFn: () => getProductReviewsQueryFn(slug!),
@@ -40,10 +41,9 @@ const ProductDetailPage = () => {
   });
 
   const product = detailData?.product;
-  const relatedProducts =  detailData?.relatedProducts ?? [];
+  const relatedProducts = detailData?.relatedProducts ?? [];
   const reviews = reviewsData?.reviews ?? [];
   const ratingBreakdown = reviewsData?.ratingBreakdown ?? [];
-
 
   const cartItems = useCart((state) => state.items);
   const updateQuantity = useCart((state) => state.updateQuantity);
@@ -70,7 +70,7 @@ const ProductDetailPage = () => {
     );
   };
 
-   if (isDetailLoading || !product) {
+  if (isDetailLoading || !product) {
     return (
       <div className="flex flex-col gap-10 px-4 py-6 animate-pulse">
         <Skeleton className="h-5 w-20" />
@@ -230,6 +230,11 @@ const ProductDetailPage = () => {
               ) : null}
             </div>
 
+            <WishlistButton
+              productId={product._id}
+              className="border border-border"
+            />
+
             {isOutofStock ? (
               <Button className="h-12 cursor-not-allowed! rounded-full bg-gray-500! text-base opacity-50">
                 <BanIcon />
@@ -251,7 +256,11 @@ const ProductDetailPage = () => {
                       }
                     }}
                   >
-                     {cartItem.quantity === 1 ? <Trash2 className="size-4" /> : <Minus className="size-4" />}
+                    {cartItem.quantity === 1 ? (
+                      <Trash2 className="size-4" />
+                    ) : (
+                      <Minus className="size-4" />
+                    )}
                   </Button>
                   <span className="text-sm font-semibold">
                     {cartItem.quantity} in cart
@@ -318,7 +327,7 @@ const ProductDetailPage = () => {
             Customer Reviews
           </h2>
 
-           {isReviewsLoading ? (
+          {isReviewsLoading ? (
             <div className="flex flex-col gap-6">
               {Array.from({ length: 2 }).map((_, index) => (
                 <div
@@ -332,7 +341,7 @@ const ProductDetailPage = () => {
                 </div>
               ))}
             </div>
-           ):reviews.length === 0 ? (
+          ) : reviews.length === 0 ? (
             <p className="text-sm text-muted-foreground">
               No reviews yet for this product.
             </p>
@@ -361,7 +370,8 @@ const ProductDetailPage = () => {
                     By {review.userId.name}
                   </p>
                   <p className="mt-1 text-sm text-muted-foreground">
-                    Reviewed on {new Date(review.createdAt).toLocaleDateString()}
+                    Reviewed on{" "}
+                    {new Date(review.createdAt).toLocaleDateString()}
                   </p>
                   <p className="mt-4 max-w-3xl text-sm leading-6 text-foreground">
                     {review.comment}
@@ -380,7 +390,10 @@ const ProductDetailPage = () => {
           <div className="flex flex-col gap-3">
             {ratingBreakdown.map((item) => {
               const total =
-                ratingBreakdown.reduce((sum, rating) => sum + rating.count, 0) || 1;
+                ratingBreakdown.reduce(
+                  (sum, rating) => sum + rating.count,
+                  0,
+                ) || 1;
               const value = (item.count / total) * 100;
 
               return (
@@ -426,21 +439,20 @@ const ProductDetailPage = () => {
         ) : (
           <div className="grid grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-3 lg:grid-cols-6">
             {relatedProducts.map((item) => (
-              <ProductCard 
-              key={item._id} 
-              id={item._id}
-              slug={item.slug}
-              imageUrl={item.images?.[0] || ""}
-              name={item.name}
-              salePrice={item.salePrice}
-              originalPrice={item.originalPrice}
-              discountPercent={item.discountPercent}
-              discountLabel={item.discountLabel || ""}
-              ratingAverage={item.ratingAverage}
-              reviewCount={item.reviewCount}
-              unit={item.unit}
-              stockCount={item.stockCount}
-              
+              <ProductCard
+                key={item._id}
+                id={item._id}
+                slug={item.slug}
+                imageUrl={item.images?.[0] || ""}
+                name={item.name}
+                salePrice={item.salePrice}
+                originalPrice={item.originalPrice}
+                discountPercent={item.discountPercent}
+                discountLabel={item.discountLabel || ""}
+                ratingAverage={item.ratingAverage}
+                reviewCount={item.reviewCount}
+                unit={item.unit}
+                stockCount={item.stockCount}
               />
             ))}
           </div>
