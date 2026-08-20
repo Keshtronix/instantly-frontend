@@ -1,29 +1,30 @@
 export type LoginType = {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 };
 
 export type RegisterType = {
-    email: string;
-    password: string;
-    name: string;
-    avatar?: string;
+  email: string;
+  password: string;
+  name: string;
+  avatar?: string;
 };
 
 export type AuthUser = {
-    _id: string;
-    name: string;
-    email: string;
-    avatar?: string | null;
-    isAdmin?: boolean;
-    githubConnected?: boolean;
-    createdAt?: string;
-    updatedAt?: string;
+  _id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  avatar?: string | null;
+  isAdmin?: boolean;
+  githubConnected?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 export type AuthResponse = {
-    message: string;
-    user: AuthUser;
+  message: string;
+  user: AuthUser;
 };
 
 export type AddressType = {
@@ -64,10 +65,8 @@ export type GetAddressesResponse = {
   addresses: AddressType[];
 };
 
-
 export type UpdateProfileInput = {
-    firstName: string;
-    lastName: string;
-    email: string;
-    phone: string;
-}
+  name: string;
+  email: string;
+  phone: string;
+};

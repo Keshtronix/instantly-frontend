@@ -30,8 +30,7 @@ const AccountProfilePage = () => {
   const form = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
-      firstName: "",
-      lastName: "",
+      name: "",
       email: "",
       phone: "",
     },
@@ -41,8 +40,7 @@ const AccountProfilePage = () => {
   useEffect(() => {
     if (data?.user) {
       form.reset({
-        firstName: data.user.firstName ?? "",
-        lastName: data.user.lastName ?? "",
+        name: data.user.name ?? "",
         email: data.user.email ?? "",
         phone: data.user.phone ?? "",
       });
@@ -58,7 +56,9 @@ const AccountProfilePage = () => {
     },
     onError: (error: any) => {
       toast.error(
-        error?.response?.data?.message || error?.message || "Failed to update profile"
+        error?.response?.data?.message ||
+          error?.message ||
+          "Failed to update profile",
       );
     },
   });
@@ -87,36 +87,23 @@ const AccountProfilePage = () => {
       <h1 className="text-2xl font-semibold text-foreground">My Profile</h1>
 
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-4">
-          <div className="grid gap-4 sm:grid-cols-2">
-            <FormField
-              control={form.control}
-              name="firstName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>First Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="First name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-
-            <FormField
-              control={form.control}
-              name="lastName"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Last Name</FormLabel>
-                  <FormControl>
-                    <Input placeholder="Last name" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-          </div>
+        <form
+          onSubmit={form.handleSubmit(onSubmit)}
+          className="flex flex-col gap-4"
+        >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <FormControl>
+                  <Input placeholder="Your name" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
           <FormField
             control={form.control}
@@ -125,7 +112,11 @@ const AccountProfilePage = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="name@example.com" {...field} />
+                  <Input
+                    type="email"
+                    placeholder="name@example.com"
+                    {...field}
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
