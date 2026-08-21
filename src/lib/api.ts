@@ -25,6 +25,13 @@ import type {
 import type { CartResponseType } from "@/types/cart.type";
 import type { WishlistResponse } from "@/types/wishlist.type";
 
+import type {
+  GetCouponsResponse,
+  CreateCouponInput,
+  CouponResponse,
+} from "@/types/coupon.type";
+
+
 export const loginMutationFn = async (
   data: LoginType,
 ): Promise<AuthResponse> => {
@@ -295,5 +302,43 @@ export const removeFromWishlistMutationFn = async (
   productId: string,
 ): Promise<WishlistResponse> => {
   const response = await API.delete<WishlistResponse>(`/wishlist/${productId}`);
+  return response.data;
+};
+
+
+// brocky coupon
+
+
+export const getAdminCouponsQueryFn = async ({
+  page,
+  limit,
+}: {
+  page: number;
+  limit: number;
+}): Promise<GetCouponsResponse> => {
+  const response = await API.get<GetCouponsResponse>("/admin/coupons", {
+    params: { page, limit },
+  });
+  return response.data;
+};
+
+export const createCouponMutationFn = async (
+  data: CreateCouponInput
+): Promise<CouponResponse> => {
+  const response = await API.post<CouponResponse>("/admin/coupons", data);
+  return response.data;
+};
+
+export const toggleCouponActiveMutationFn = async (
+  couponId: string
+): Promise<CouponResponse> => {
+  const response = await API.patch<CouponResponse>(`/admin/coupons/${couponId}/toggle`);
+  return response.data;
+};
+
+export const deleteCouponMutationFn = async (
+  couponId: string
+): Promise<{ message: string }> => {
+  const response = await API.delete<{ message: string }>(`/admin/coupons/${couponId}`);
   return response.data;
 };
