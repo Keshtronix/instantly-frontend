@@ -94,15 +94,12 @@ export default function AdminLayout() {
       <div className="flex min-h-screen w-full">
         <Sidebar className="border-r border-border">
           <SidebarHeader className="flex h-16 items-center border-b border-border/10 px-4">
-            <Link
-              to={PROTECTED_ROUTES.ADMIN_DASHBOARD}
-              className="flex items-center gap-2 font-semibold"
-            >
+            <div className="flex items-center gap-2 font-semibold">
               <Logo to={PROTECTED_ROUTES.ADMIN_DASHBOARD} />
               <span className="text-xs font-bold uppercase tracking-wider text-secondary">
                 Admin
               </span>
-            </Link>
+            </div>
           </SidebarHeader>
           <SidebarContent className="p-3">
             <SidebarGroup>

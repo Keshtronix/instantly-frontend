@@ -399,6 +399,7 @@ export default function AdminCouponsPage() {
                             onCheckedChange={() =>
                               toggleMutation.mutate(coupon._id)
                             }
+                            className="data-[state=unchecked]:bg-gray-300"
                           />
                           <Badge
                             variant={
