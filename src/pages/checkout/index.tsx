@@ -15,7 +15,13 @@ import {
 } from "@/components/ui/empty";
 import { useCart } from "@/hooks/use-cart";
 import { PUBLIC_ROUTES } from "@/routes/route";
-import { ArrowLeft, CreditCard, MapPin, PackageCheck, ShoppingCart } from "lucide-react";
+import {
+  ArrowLeft,
+  CreditCard,
+  MapPin,
+  PackageCheck,
+  ShoppingCart,
+} from "lucide-react";
 import { useMemo, useState, useEffect, type ReactNode } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import AddressSection from "./components/address-section";
@@ -23,9 +29,7 @@ import OrderSummary from "./components/order-summary";
 import PaymentSection from "./components/payment-section";
 import ReviewSection from "./components/review-section";
 import { CheckoutPaymentMethod } from "@/constants/checkout";
-import {
-  type AddressFormValues,
-} from "@/constants/address";
+import { type AddressFormValues } from "@/constants/address";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getAddressesQueryFn,
@@ -33,24 +37,32 @@ import {
   createOrderMutationFn,
 } from "@/lib/api";
 import { toast } from "sonner";
+import type { ApplyCouponResponse } from "@/types/coupon.type";
 
 const CheckoutPage = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const {items, orderTotal, resetCart} = useCart((state) => state);
+  const { items, orderTotal, resetCart } = useCart((state) => state);
   const cartCount = useCart((state) => state.cartCount());
 
   const [selectedAddressId, setSelectedAddressId] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState<CheckoutPaymentMethod | "">("");
+  const [paymentMethod, setPaymentMethod] = useState<
+    CheckoutPaymentMethod | ""
+  >("");
   const [openPanel, setOpenPanel] = useState("address");
+  //brocky
+  // add state near the other useState calls
+  const [appliedCoupon, setAppliedCoupon] =
+    useState<ApplyCouponResponse | null>(null);
 
- 
+  const discountAmount = appliedCoupon?.discountAmount ?? 0;
+  const finalOrderTotal = Math.max(orderTotal - discountAmount, 0);
+
   const { data: addressData, isLoading: isAddressesLoading } = useQuery({
     queryKey: ["addresses"],
     queryFn: getAddressesQueryFn,
   });
   const addresses = addressData?.addresses || [];
-
 
   // Auto-select default address if available
   useEffect(() => {
@@ -64,13 +76,12 @@ const CheckoutPage = () => {
     }
   }, [addresses, selectedAddressId]);
 
-
   const selectedAddress = useMemo(
     () => addresses.find((address) => address._id === selectedAddressId),
-    [addresses, selectedAddressId]
+    [addresses, selectedAddressId],
   );
 
- const createAddressMutation = useMutation({
+  const createAddressMutation = useMutation({
     mutationFn: createAddressMutationFn,
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ["addresses"] });
@@ -82,7 +93,6 @@ const CheckoutPage = () => {
       toast.error(error?.message || "Failed to add address");
     },
   });
-
 
   const createOrderMutation = useMutation({
     mutationFn: createOrderMutationFn,
@@ -100,7 +110,6 @@ const CheckoutPage = () => {
     },
   });
 
-
   const handleAddAddress = (values: AddressFormValues) => {
     createAddressMutation.mutate(values);
   };
@@ -115,11 +124,21 @@ const CheckoutPage = () => {
     setOpenPanel("review");
   };
 
+  // const handlePlaceOrder = () => {
+  //   if (!selectedAddressId || !paymentMethod) return;
+  //   createOrderMutation.mutate({
+  //     addressId: selectedAddressId,
+  //     paymentMethod,
+  //   });
+  // };
+
+  // update handlePlaceOrder
   const handlePlaceOrder = () => {
     if (!selectedAddressId || !paymentMethod) return;
     createOrderMutation.mutate({
       addressId: selectedAddressId,
       paymentMethod,
+      couponCode: appliedCoupon?.code,
     });
   };
 
@@ -145,7 +164,6 @@ const CheckoutPage = () => {
       </div>
     );
   }
-
 
   return (
     <div className="w-full max-w-6xl mx-auto flex flex-col gap-6 py-8">
@@ -201,10 +219,10 @@ const CheckoutPage = () => {
               !selectedAddress
                 ? "Select delivery address first"
                 : paymentMethod === CheckoutPaymentMethod.CARD
-                ? "Card / Debit card"
-                : paymentMethod === CheckoutPaymentMethod.CASH_ON_DELIVERY
-                ? "Cash on delivery"
-                : "Choose payment option"
+                  ? "Card / Debit card"
+                  : paymentMethod === CheckoutPaymentMethod.CASH_ON_DELIVERY
+                    ? "Cash on delivery"
+                    : "Choose payment option"
             }
           >
             <PaymentSection
@@ -222,7 +240,7 @@ const CheckoutPage = () => {
           >
             <ReviewSection
               items={items}
-              total={orderTotal}
+              total={finalOrderTotal}
               selectedAddress={selectedAddress}
               paymentMethod={paymentMethod}
               onPlaceOrder={handlePlaceOrder}
@@ -231,7 +249,12 @@ const CheckoutPage = () => {
           </CheckoutPanel>
         </Accordion>
 
-        <OrderSummary />
+        {/* <OrderSummary /> */}
+        <OrderSummary
+          appliedCoupon={appliedCoupon}
+          onCouponApplied={setAppliedCoupon}
+          finalTotal={finalOrderTotal}
+        />
       </div>
     </div>
   );

@@ -38,3 +38,12 @@ export type CouponResponse = {
   message: string;
   coupon: CouponType;
 };
+
+export type ApplyCouponResponse = {
+  message: string;
+  couponId: string;
+  code: string;
+  discountType: DiscountType;
+  discountValue: number;
+  discountAmount: number;
+};

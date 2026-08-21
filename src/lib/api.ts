@@ -29,6 +29,7 @@ import type {
   GetCouponsResponse,
   CreateCouponInput,
   CouponResponse,
+  ApplyCouponResponse,
 } from "@/types/coupon.type";
 
 
@@ -340,5 +341,14 @@ export const deleteCouponMutationFn = async (
   couponId: string
 ): Promise<{ message: string }> => {
   const response = await API.delete<{ message: string }>(`/admin/coupons/${couponId}`);
+  return response.data;
+};
+
+
+export const validateCouponMutationFn = async (data: {
+  code: string;
+  subtotal: number;
+}): Promise<ApplyCouponResponse> => {
+  const response = await API.post<ApplyCouponResponse>("/coupons/validate", data);
   return response.data;
 };

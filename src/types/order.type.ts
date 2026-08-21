@@ -48,6 +48,7 @@ export type OrderType = {
 export type CreateOrderInput = {
   addressId: string;
   paymentMethod: string;
+  couponCode?: string;
 };
 
 export type CreateOrderResponse = {
