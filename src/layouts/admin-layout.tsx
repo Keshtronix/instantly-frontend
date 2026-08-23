@@ -6,6 +6,7 @@ import {
   ArrowLeft,
   LogOut,
   Ticket,
+  User,
 } from "lucide-react";
 import { Navigate } from "react-router-dom";
 import { Spinner } from "@/components/ui/spinner";
@@ -45,6 +46,11 @@ const adminNavItems = [
     label: "Products",
     to: "/admin/products",
     icon: Package,
+  },
+  {
+    label: "Customers",
+    to: "/admin/customers",
+    icon: User,
   },
   {
     label: "Coupons",

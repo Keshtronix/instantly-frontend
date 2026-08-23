@@ -32,6 +32,15 @@ import type {
   ApplyCouponResponse,
 } from "@/types/coupon.type";
 
+// import type {
+//   CustomerType,
+//   CustomersResponseType,
+//   CustomerParams,
+//   CustomerDetailResponseType,
+//   UpdateCustomerPayload,
+//   UpdateCustomerStatusPayload,
+// } from "@/types/customer.type";
+
 
 export const loginMutationFn = async (
   data: LoginType,
@@ -352,3 +361,62 @@ export const validateCouponMutationFn = async (data: {
   const response = await API.post<ApplyCouponResponse>("/coupons/validate", data);
   return response.data;
 };
+
+
+
+//brocky customer management
+
+
+export const getCustomersQueryFn = async ({
+  page,
+  limit,
+  status,
+  search,
+}: {
+  page: number;
+  limit: number;
+  status?: string;
+  search?: string;
+}): Promise<any> => {
+  const response = await API.get("/admin/customers", {
+    params: { page, limit, status, search },
+  });
+  return response.data;
+};
+
+export const getCustomerByIdQueryFn = async (id: string): Promise<any> => {
+  const response = await API.get(`/admin/customers/${id}`);
+  return response.data;
+};
+
+export const updateCustomerMutationFn = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: {
+    name?: string;
+    email?: string;
+    phone?: string;
+  };
+}): Promise<any> => {
+  const response = await API.patch(`/admin/customers/${id}`, data);
+  return response.data;
+};
+
+export const updateCustomerStatusMutationFn = async ({
+  id,
+  status,
+  reason,
+}: {
+  id: string;
+  status: "active" | "suspended" | "banned";
+  reason?: string;
+}): Promise<any> => {
+  const response = await API.patch(`/admin/customers/${id}/status`, {
+    status,
+    reason,
+  });
+  return response.data;
+};
+

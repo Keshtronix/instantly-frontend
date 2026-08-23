@@ -14,6 +14,7 @@ import AdminProductsPage from "@/pages/admin/products";
 import AdminNewProductPage from "@/pages/admin/new-product";
 import WishlistPage from "@/pages/account/wishlist";
 import AdminCouponsPage from "@/pages/admin/coupons";
+import AdminCustomersPage from "@/pages/admin/customers";
 
 // export const AUTH_ROUTES = {
 //   SIGN_IN: '/',
@@ -40,6 +41,9 @@ export const PROTECTED_ROUTES = {
   ADMIN_PRODUCTS: "/admin/products",
   ADMIN_PRODUCTS_NEW: "/admin/products/new",
   ADMIN_COUPONS: "/admin/coupons",
+  ADMIN_CUSTOMERS: "/admin/customers",
+  ADMIN_CUSTOMER_DETAIL: (id: string) => `/admin/customers/${id}`,
+  ADMIN_CUSTOMER_STATUS: (id: string) => `/admin/customers/${id}/status`,
 };
 
 // export const authRouthsPaths: Array<{ path: string; element: React.ComponentType }> = [];
@@ -93,7 +97,7 @@ export const protectedRoutesPaths = [
     element: AccountProfilePage,
     account: true,
   },
-    {
+  {
     path: PROTECTED_ROUTES.WISHLIST,
     element: WishlistPage,
     account: true,
@@ -120,5 +124,9 @@ export const adminRoutesPaths = [
   {
     path: PROTECTED_ROUTES.ADMIN_COUPONS,
     element: AdminCouponsPage,
+  },
+  {
+    path: PROTECTED_ROUTES.ADMIN_CUSTOMERS,
+    element: AdminCustomersPage,
   },
 ];
