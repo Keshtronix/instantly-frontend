@@ -41,6 +41,17 @@ import type {
 //   UpdateCustomerStatusPayload,
 // } from "@/types/customer.type";
 
+import { PROTECTED_ROUTES as ROUTES } from "@/routes/route";
+ // adjust to your actual import
+import type {
+  CreateCategoryPayload,
+  UpdateCategoryPayload,
+  CreateSubCategoryPayload,
+  UpdateSubCategoryPayload,
+} from "@/types/categories.type";
+
+
+
 
 export const loginMutationFn = async (
   data: LoginType,
@@ -420,3 +431,70 @@ export const updateCustomerStatusMutationFn = async ({
   return response.data;
 };
 
+
+
+
+
+// Categories
+export const getCategoriesQueryFn = async (): Promise<any> => {
+  const response = await API.get(ROUTES.ADMIN_CATEGORIES);
+  return response.data;
+};
+
+export const createCategoryMutationFn = async (
+  data: CreateCategoryPayload
+): Promise<any> => {
+  const response = await API.post(ROUTES.ADMIN_CATEGORIES, data);
+  return response.data;
+};
+
+export const updateCategoryMutationFn = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: UpdateCategoryPayload;
+}): Promise<any> => {
+  const response = await API.patch(ROUTES.ADMIN_CATEGORY_DETAIL(id), data);
+  return response.data;
+};
+
+export const deleteCategoryMutationFn = async (id: string): Promise<any> => {
+  const response = await API.delete(ROUTES.ADMIN_CATEGORY_DETAIL(id));
+  return response.data;
+};
+
+// Sub-categories
+export const getSubCategoriesQueryFn = async ({
+  categoryId,
+}: {
+  categoryId?: string;
+} = {}): Promise<any> => {
+  const response = await API.get(ROUTES.ADMIN_SUB_CATEGORIES, {
+    params: { categoryId },
+  });
+  return response.data;
+};
+
+export const createSubCategoryMutationFn = async (
+  data: CreateSubCategoryPayload
+): Promise<any> => {
+  const response = await API.post(ROUTES.ADMIN_SUB_CATEGORIES, data);
+  return response.data;
+};
+
+export const updateSubCategoryMutationFn = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: UpdateSubCategoryPayload;
+}): Promise<any> => {
+  const response = await API.patch(ROUTES.ADMIN_SUB_CATEGORY_DETAIL(id), data);
+  return response.data;
+};
+
+export const deleteSubCategoryMutationFn = async (id: string): Promise<any> => {
+  const response = await API.delete(ROUTES.ADMIN_SUB_CATEGORY_DETAIL(id));
+  return response.data;
+};

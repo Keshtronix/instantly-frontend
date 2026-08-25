@@ -47,6 +47,11 @@ const adminNavItems = [
     to: "/admin/products",
     icon: Package,
   },
+    {
+    label: "Categories",
+    to: "/admin/categories",
+    icon: Package,
+  },
   {
     label: "Customers",
     to: "/admin/customers",

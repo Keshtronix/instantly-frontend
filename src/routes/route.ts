@@ -15,6 +15,7 @@ import AdminNewProductPage from "@/pages/admin/new-product";
 import WishlistPage from "@/pages/account/wishlist";
 import AdminCouponsPage from "@/pages/admin/coupons";
 import AdminCustomersPage from "@/pages/admin/customers";
+import AdminCategoriesPage from "@/pages/admin/categories";
 
 // export const AUTH_ROUTES = {
 //   SIGN_IN: '/',
@@ -44,6 +45,10 @@ export const PROTECTED_ROUTES = {
   ADMIN_CUSTOMERS: "/admin/customers",
   ADMIN_CUSTOMER_DETAIL: (id: string) => `/admin/customers/${id}`,
   ADMIN_CUSTOMER_STATUS: (id: string) => `/admin/customers/${id}/status`,
+  ADMIN_CATEGORIES: "/admin/categories",
+  ADMIN_CATEGORY_DETAIL: (id: string) => `/admin/categories/${id}`,
+  ADMIN_SUB_CATEGORIES: "/admin/sub-categories",
+  ADMIN_SUB_CATEGORY_DETAIL: (id: string) => `/admin/sub-categories/${id}`,
 };
 
 // export const authRouthsPaths: Array<{ path: string; element: React.ComponentType }> = [];
@@ -129,4 +134,20 @@ export const adminRoutesPaths = [
     path: PROTECTED_ROUTES.ADMIN_CUSTOMERS,
     element: AdminCustomersPage,
   },
+  {
+    path: PROTECTED_ROUTES.ADMIN_CATEGORIES,
+    element: AdminCategoriesPage,
+  },
+  // {
+  //   path: PROTECTED_ROUTES.ADMIN_CATEGORY_DETAIL,
+  //   element: AdminCategoryDetailPage,
+  // },
+  // {
+  //   path: PROTECTED_ROUTES.ADMIN_SUB_CATEGORIES,
+  //   element: AdminSubCategoriesPage,
+  // },
+  // {
+  //   path: PROTECTED_ROUTES.ADMIN_SUB_CATEGORY_DETAIL,
+  //   element: AdminSubCategoryDetailPage,
+  // },
 ];
