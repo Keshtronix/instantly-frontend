@@ -16,6 +16,7 @@ import WishlistPage from "@/pages/account/wishlist";
 import AdminCouponsPage from "@/pages/admin/coupons";
 import AdminCustomersPage from "@/pages/admin/customers";
 import AdminCategoriesPage from "@/pages/admin/categories";
+import AdminEditProductPage from "@/pages/admin/edit-product";
 
 // export const AUTH_ROUTES = {
 //   SIGN_IN: '/',
@@ -41,6 +42,11 @@ export const PROTECTED_ROUTES = {
   ADMIN_ORDERS: "/admin/orders",
   ADMIN_PRODUCTS: "/admin/products",
   ADMIN_PRODUCTS_NEW: "/admin/products/new",
+  ADMIN_PRODUCTS_EDIT: "/admin/products/:id/edit",
+  // ADMIN_PRODUCT_DETAIL: (id: string) => `/admin/products/${id}`,
+  // ADMIN_PRODUCT_STATUS: (id: string) => `/admin/products/${id}/status`,
+  // ADMIN_PRODUCT_IMAGES: (id: string) => `/admin/products/${id}/images`,
+  // ADMIN_PRODUCT_IMAGE_DETAIL: (productId: string, imageId: string) =>,
   ADMIN_COUPONS: "/admin/coupons",
   ADMIN_CUSTOMERS: "/admin/customers",
   ADMIN_CUSTOMER_DETAIL: (id: string) => `/admin/customers/${id}`,
@@ -125,6 +131,10 @@ export const adminRoutesPaths = [
   {
     path: PROTECTED_ROUTES.ADMIN_PRODUCTS_NEW,
     element: AdminNewProductPage,
+  },
+  {
+    path: PROTECTED_ROUTES.ADMIN_PRODUCTS_EDIT,
+    element: AdminEditProductPage,
   },
   {
     path: PROTECTED_ROUTES.ADMIN_COUPONS,

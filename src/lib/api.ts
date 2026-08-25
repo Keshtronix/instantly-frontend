@@ -287,6 +287,30 @@ export const uploadProductImagesMutationFn = async (
   return response.data;
 };
 
+// brocky
+
+// Admin Product Management
+export const getAdminProductByIdQueryFn = async (id: string): Promise<any> => {
+  const response = await API.get(`/admin/products/${id}`);
+  return response.data;
+};
+
+export const updateProductMutationFn = async ({
+  id,
+  data,
+}: {
+  id: string;
+  data: Record<string, any>;
+}): Promise<any> => {
+  const response = await API.patch(`/admin/products/${id}`, data);
+  return response.data;
+};
+
+export const deleteProductMutationFn = async (id: string): Promise<any> => {
+  const response = await API.delete(`/admin/products/${id}`);
+  return response.data;
+};
+
 export const generateProductAiMutationFn = async (data: {
   action: "rephrase-title" | "generate-desc";
   title: string;
