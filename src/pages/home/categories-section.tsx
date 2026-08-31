@@ -69,7 +69,7 @@ const CategoriesSection = () => {
                 >
                   <span className="flex size-20 items-center justify-center rounded-xl p-0.5 transition hover:bg-muted group-hover:scale-105 sm:size-24">
                     <img
-                      src={category.imageUrl}
+                      src={category.imageUrl ?? undefined}
                       alt={category.name}
                       className="size-full object-contain"
                     />

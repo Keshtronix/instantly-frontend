@@ -26,7 +26,9 @@ type OrderSummaryProps = {
 
 const OrderSummary = ({ appliedCoupon, onCouponApplied, finalTotal }: OrderSummaryProps) => {
   const [couponInput, setCouponInput] = useState("");
-  const { deliveryFee, tax, orderTotal, isCartLoading } = useCart((state) => state);
+  //const { deliveryFee, tax, orderTotal, isCartLoading } = useCart((state) => state);
+   const { deliveryFee, tax, isCartLoading } = useCart((state) => state);
+  const cartCount = useCart((state) => state.cartCount());
   const cartCount = useCart((state) => state.cartCount());
   const subtotal = useCart((state) => state.cartTotal());
 
