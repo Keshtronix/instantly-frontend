@@ -29,7 +29,6 @@ const OrderSummary = ({ appliedCoupon, onCouponApplied, finalTotal }: OrderSumma
   //const { deliveryFee, tax, orderTotal, isCartLoading } = useCart((state) => state);
    const { deliveryFee, tax, isCartLoading } = useCart((state) => state);
   const cartCount = useCart((state) => state.cartCount());
-  const cartCount = useCart((state) => state.cartCount());
   const subtotal = useCart((state) => state.cartTotal());
 
   const discountAmount = appliedCoupon?.discountAmount ?? 0;
