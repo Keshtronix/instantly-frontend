@@ -21,7 +21,7 @@ const ProductSections = () => {
           <Skeleton className="h-8 w-48" />
           <Skeleton className="h-5 w-20" />
         </div>
-        <div className="grid grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-3 lg:grid-cols-6">
+        <div className="grid grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
           {Array.from({ length: 12 }).map((_, index) => (
             <div key={index} className="flex flex-col gap-2">
               <Skeleton className="aspect-square w-full rounded-md animate-pulse" />
@@ -43,7 +43,7 @@ const ProductSections = () => {
   return (
     <section className="flex flex-col gap-5 py-8">
       <div className="flex items-center justify-between gap-4">
-        <h2 className="text-2xl font-semibold text-foreground">More products</h2>
+        <h2 className="text-2xl font-semibold text-foreground">New Arrivals</h2>
         <Link
           to={PUBLIC_ROUTES.PRODUCTS}
           className="inline-flex items-center gap-1 text-sm font-medium text-foreground underline-offset-4 hover:underline"
@@ -53,7 +53,7 @@ const ProductSections = () => {
         </Link>
       </div>
 
-      <div className="grid grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-3 lg:grid-cols-6">
+      <div className="grid grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
         {products.map((product) => (
           <ProductCard 
               key={product._id} 

@@ -311,7 +311,7 @@ const ProductDetailPage = () => {
                 </div>
                 <Button
                   onClick={handleAddToCart}
-                  className="h-12 rounded-full bg-green-light! text-base font-semibold"
+                  className="h-12 rounded-full bg-[var(--btn-cart)] hover:bg-[var(--btn-cart-hover)] text-base font-semibold"
                 >
                   Add to cart
                 </Button>

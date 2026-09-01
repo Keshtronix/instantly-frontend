@@ -30,7 +30,7 @@ import {
 import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { ModeToggle } from "./mode-toggle";
+//import { ModeToggle } from "./mode-toggle";
 import { useUser } from "@/hooks/use-user";
 import { useAuth } from "@/hooks/use-auth";
 import { useCart } from "@/hooks/use-cart";
@@ -86,7 +86,7 @@ const Nav = () => {
         <Logo className="shrink-0 lg:mr-10" />
 
         <form onSubmit={handleSearch} className="min-w-0 flex-1">
-          <InputGroup className="mx-auto h-11 w-full max-w-6xl rounded-full border border-black/70 bg-background px-2">
+          <InputGroup className="mx-auto h-11 w-full max-w-6xl rounded-full border border-black/70 bg-background px-2 ">
             <InputGroupAddon align="inline-start" className="pl-2 pr-1">
               <Search className="size-5" />
             </InputGroupAddon>
@@ -100,7 +100,7 @@ const Nav = () => {
           </InputGroup>
         </form>
 
-        <ModeToggle />
+        {/* <ModeToggle /> */}
         {user ? <WishlistNavButton /> : null}
 
         <CartButton />

@@ -8,9 +8,10 @@ const HomePage = () => {
   return (
     <div className="w-full">
       <HeroCarousel />
-      <CategoriesSection />
+      
       <TodayDealsSection />
       <ProductSections />
+      <CategoriesSection />
     </div>
   )
 }
