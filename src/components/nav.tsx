@@ -109,7 +109,7 @@ const Nav = () => {
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="hidden shrink-0 items-center gap-2 rounded-lg px-2 py-1.5 text-left text-foreground transition hover:bg-accent md:flex"
+                className="hidden shrink-0 items-center gap-2 rounded-lg px-2 py-1.5 text-left text-foreground transition hover:bg-[var(--grey100)] md:flex"
               >
                 <Avatar size="sm">
                   <AvatarImage src={user.avatar || undefined} alt={user.name} />
@@ -182,7 +182,7 @@ const Nav = () => {
           <button
             type="button"
             onClick={() => openAuth("login")}
-            className="hidden shrink-0 items-center gap-2 rounded-lg px-2 py-1.5 text-foreground transition hover:bg-accent md:flex"
+            className="hidden shrink-0 items-center gap-2 rounded-lg px-2 py-1.5 text-foreground transition hover:bg-[var(--grey100)] md:flex"
           >
             <UserRound className="size-7 stroke-[2.3]" />
             <span className="leading-tight text-left">

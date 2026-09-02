@@ -32,6 +32,10 @@ const Toaster = ({ ...props }: ToasterProps) => {
           "--normal-text": "var(--popover-foreground)",
           "--normal-border": "var(--border)",
           "--border-radius": "var(--radius)",
+                    // Force every toast variant to black & white
+          "--success-bg": "#000000",
+          "--success-text": "#ffffff",
+          "--success-border": "#000000",
         } as React.CSSProperties
       }
       toastOptions={{

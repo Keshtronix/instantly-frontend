@@ -10,7 +10,7 @@ const CartButton = () => {
     <button
       type="button"
       onClick={() => setIsCartOpen(true)}
-      className="relative flex shrink-0 items-center gap-2 rounded-lg px-2 py-1.5 text-foreground transition hover:bg-accent"
+      className="relative flex shrink-0 items-center gap-2 rounded-lg px-2 py-1.5 text-foreground transition hover:bg-[var(--grey100)]"
     >
       <span className="relative">
         <ShoppingCart className="size-7 stroke-[2.3]" />

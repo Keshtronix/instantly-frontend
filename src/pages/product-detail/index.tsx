@@ -242,7 +242,7 @@ const ProductDetailPage = () => {
               </Button>
             ) : isInCart ? (
               <>
-                <div className="flex h-12 items-center justify-between rounded-xl bg-green-light! px-4 text-white">
+                <div className="flex h-12 items-center justify-between rounded-xl bg-[var(--btn-cart-hover)] px-4 text-white">
                   <Button
                     type="button"
                     variant="ghost"

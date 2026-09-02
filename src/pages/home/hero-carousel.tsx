@@ -68,10 +68,17 @@ const HeroCarousel = () => {
                 <img
                   src={slide.image}
                   alt=""
-                  className="absolute inset-0 size-full object-cover grayscale contrast-125"
+                  className="absolute inset-0 size-full object-cover"
                 />
+
+                {/* Solid white panel behind text — no blending with image colors */}
+                <div
+                  className="absolute inset-y-0 left-0 w-full bg-white sm:w-[55%]
+                      [mask-image:linear-gradient(to_right,white_75%,transparent_100%)]
+                      sm:[mask-image:linear-gradient(to_right,white_80%,transparent_100%)]"
+                                  />
                 {/* subtle white wash so text panel blends with the mono image */}
-                <div className="absolute inset-0 bg-gradient-to-r from-white via-white/70 to-transparent sm:from-white sm:via-white/40 sm:to-transparent" />
+                {/* <div className="absolute inset-0 bg-gradient-to-r from-white via-white/70 to-transparent sm:from-white sm:via-white/40 sm:to-transparent" /> */}
 
                 <div className="relative z-10 flex h-full sm:max-w-[50%] flex-col justify-center gap-5 p-7 md:p-9">
                   {slide.subtitle && (

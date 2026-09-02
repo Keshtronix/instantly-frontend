@@ -202,7 +202,7 @@ export const AuthDialog = () => {
                   <Button
                     type="submit"
                     size="lg"
-                    className="w-full bg-green-light! text-white"
+                    className="w-full bg-primary text-white hover:bg-[var(--btn-cart)]"
                     disabled={loginMutation.isPending}
                   >
                     {loginMutation.isPending ? "Signing in..." : "Sign in"}
@@ -284,7 +284,7 @@ export const AuthDialog = () => {
                   <Button
                     type="submit"
                     size="lg"
-                    className="w-full bg-green-light! text-white"
+                    className="w-full bg-primary text-white hover:bg-[var(--btn-cart)]"
                     disabled={registerMutation.isPending}
                   >
                     {registerMutation.isPending

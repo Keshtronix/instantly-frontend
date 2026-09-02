@@ -127,6 +127,7 @@
   --popover-foreground: oklch(0.18 0.01 160);
   /* --primary: oklch(0.28 0.10 160); */
   --primary: oklch(0 0 0);
+  
   --primary-foreground: oklch(0.98 0.01 100);
   --secondary: oklch(0.68 0.18 40);
   --secondary-foreground: oklch(1 0 0);
@@ -135,10 +136,14 @@
   
   /* New Accent: Warm Golden-Orange */
   /* --accent: oklch(0.85 0.22 65); */
-  --accent:  oklch(0.75 0.02 65);
+  /* --accent:  oklch(0.75 0.02 65); */
+  --accent: oklch(92.8% 0.006 264.531);
+  --grey50:oklch(98.5% 0.002 247.839);
+  --grey100: oklch(96.7% 0.003 264.542);
 
 
-  --accent-foreground: oklch(0.20 0.05 40);
+  /* --accent-foreground: oklch(0.20 0.05 40); */
+  --accent-foreground: oklch(0 0 0); 
   
   --destructive: oklch(0.30 0.15 25);
   --destructive-foreground: oklch(0.96 0.02 85);
