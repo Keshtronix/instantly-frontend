@@ -5,8 +5,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { loginMutationFn, registerMutationFn } from "@/lib/api";
-import type { LoginType, RegisterType } from "@/types/auth.type";
+import {
+  loginMutationFn,
+  registerMutationFn,
+  forgotPasswordMutationFn,
+} from "@/lib/api";
+import type {
+  LoginType,
+  RegisterType,
+  ForgotPasswordType,
+} from "@/types/auth.type";
 import Logo from "@/components/logo";
 import { useAuth } from "@/hooks/use-auth";
 import { useCart } from "@/hooks/use-cart";
@@ -39,15 +47,22 @@ const registerSchema = z.object({
   password: z.string().trim().min(1, "Password is required"),
 });
 
+const forgotPasswordSchema = z.object({
+  email: z.string().trim().email("Enter a valid email address"),
+});
+
 export const AuthDialog = () => {
   const { isAuthOpen, closeAuth, view, setView } = useAuth();
   const queryClient = useQueryClient();
 
   const fetchCart = useCart((state) => state.fetchCart);
 
-  // NEW: track successful registration + the email used
+  // track successful registration + the email used
   const [isRegistered, setIsRegistered] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState("");
+
+  // NEW: track successful "forgot password" submission
+  const [isResetSent, setIsResetSent] = useState(false);
 
   // Login Mutation
   const loginMutation = useMutation({
@@ -71,11 +86,6 @@ export const AuthDialog = () => {
   const registerMutation = useMutation({
     mutationFn: registerMutationFn,
     onSuccess: async (_data, variables) => {
-      // await queryClient.invalidateQueries({ queryKey: ["current-user"] });
-      // await fetchCart();
-      // toast.success("Successfully registered!");
-      // closeAuth();
-
       // Don't invalidate/fetchCart/closeAuth yet — user isn't verified/logged in
       setRegisteredEmail(variables.email);
       setIsRegistered(true);
@@ -85,6 +95,21 @@ export const AuthDialog = () => {
         error?.response?.data?.message ||
           error?.message ||
           "Unable to create account. Try again.",
+      );
+    },
+  });
+
+  // NEW: Forgot Password Mutation
+  const forgotPasswordMutation = useMutation({
+    mutationFn: forgotPasswordMutationFn,
+    onSuccess: () => {
+      setIsResetSent(true);
+    },
+    onError: (error: any) => {
+      toast.error(
+        error?.response?.data?.message ||
+          error?.message ||
+          "Unable to send reset link. Try again.",
       );
     },
   });
@@ -107,6 +132,14 @@ export const AuthDialog = () => {
     },
   });
 
+  // NEW: forgot-password form
+  const forgotPasswordForm = useForm<ForgotPasswordType>({
+    resolver: zodResolver(forgotPasswordSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
+
   const onLoginSubmit = (values: LoginType) => {
     loginMutation.mutate(values);
   };
@@ -115,17 +148,32 @@ export const AuthDialog = () => {
     registerMutation.mutate(values);
   };
 
+  // NEW
+  const onForgotPasswordSubmit = (values: ForgotPasswordType) => {
+    forgotPasswordMutation.mutate(values);
+  };
+
   // Reset the success state whenever the dialog closes or view changes
   const handleOpenChange = (open: boolean) => {
     if (!open) {
       closeAuth();
       setIsRegistered(false);
       registerForm.reset();
+      // NEW
+      setIsResetSent(false);
+      forgotPasswordForm.reset();
     }
   };
 
+  // NEW: reset the "check your email" state whenever the user navigates away
+  // from the forgot-password view (e.g. back to login)
+  const goToView = (nextView: "login" | "register" | "forgot-password") => {
+    setIsResetSent(false);
+    forgotPasswordForm.reset();
+    setView(nextView);
+  };
+
   return (
-    // <Dialog open={isAuthOpen} onOpenChange={(open) => !open && closeAuth()}>
     <Dialog open={isAuthOpen} onOpenChange={handleOpenChange}>
       <DialogContent key={view} className="sm:max-w-md py-8 px-8">
         {isRegistered ? (
@@ -145,6 +193,20 @@ export const AuthDialog = () => {
               Go to login
             </Button>
           </div>
+        ) : view === "forgot-password" && isResetSent ? (
+          // NEW: "check your email" success state for password reset
+          <div className="flex flex-col items-center justify-center gap-2 py-6">
+            <MailCheckIcon size={48} className="animate-bounce" />
+            <h2 className="text-xl font-bold">Check your email</h2>
+            <p className="mb-2 text-center text-sm text-muted-foreground">
+              If an account exists for{" "}
+              {forgotPasswordForm.getValues("email")}, we've sent a link to
+              reset your password.
+            </p>
+            <Button className="h-[40px]" onClick={() => goToView("login")}>
+              Back to login
+            </Button>
+          </div>
         ) : (
           <>
             <DialogHeader className="flex flex-col items-center justify-center gap-1">
@@ -152,7 +214,9 @@ export const AuthDialog = () => {
               <DialogTitle className="text-2xl font-semibold tracking-tight">
                 {view === "login"
                   ? "Sign in to your account"
-                  : "Create your account"}
+                  : view === "register"
+                    ? "Create your account"
+                    : "Reset your password"}
               </DialogTitle>
             </DialogHeader>
 
@@ -186,7 +250,17 @@ export const AuthDialog = () => {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Password</FormLabel>
+                        <div className="flex items-center justify-between">
+                          <FormLabel>Password</FormLabel>
+                          {/* NEW: forgot password trigger */}
+                          <button
+                            type="button"
+                            onClick={() => goToView("forgot-password")}
+                            className="text-xs font-medium text-muted-foreground underline underline-offset-4 cursor-pointer"
+                          >
+                            Forgot password?
+                          </button>
+                        </div>
                         <FormControl>
                           <Input
                             type="password"
@@ -220,7 +294,7 @@ export const AuthDialog = () => {
                   </p>
                 </form>
               </Form>
-            ) : (
+            ) : view === "register" ? (
               <Form {...registerForm}>
                 <form
                   onSubmit={registerForm.handleSubmit(onRegisterSubmit)}
@@ -300,6 +374,61 @@ export const AuthDialog = () => {
                       className="font-medium text-foreground underline underline-offset-4 cursor-pointer"
                     >
                       Sign in
+                    </button>
+                  </p>
+                </form>
+              </Form>
+            ) : (
+              // NEW: forgot-password view
+              <Form {...forgotPasswordForm}>
+                <form
+                  onSubmit={forgotPasswordForm.handleSubmit(
+                    onForgotPasswordSubmit,
+                  )}
+                  className="space-y-4 py-2"
+                >
+                  <p className="text-sm text-muted-foreground text-center">
+                    Enter the email associated with your account and we'll
+                    send you a link to reset your password.
+                  </p>
+
+                  <FormField
+                    control={forgotPasswordForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="name@example.com"
+                            type="email"
+                            autoComplete="email"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <Button
+                    type="submit"
+                    size="lg"
+                    className="w-full bg-primary text-white hover:bg-[var(--btn-cart)]"
+                    disabled={forgotPasswordMutation.isPending}
+                  >
+                    {forgotPasswordMutation.isPending
+                      ? "Sending..."
+                      : "Send reset link"}
+                  </Button>
+
+                  <p className="text-sm text-muted-foreground text-center">
+                    <button
+                      type="button"
+                      onClick={() => goToView("login")}
+                      className="font-medium text-foreground underline underline-offset-4 cursor-pointer"
+                    >
+                      Back to login
                     </button>
                   </p>
                 </form>

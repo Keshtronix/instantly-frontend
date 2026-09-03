@@ -3,6 +3,9 @@ import AccountProfilePage from "@/pages/account/profile";
 import AccountReviewsPage from "@/pages/account/reviews";
 import CheckoutPage from "@/pages/checkout";
 import HomePage from "@/pages/home";
+import TermsAndConditionsPage from "@/pages/terms";
+import PrivacyPolicyPage from "@/pages/privacy";
+import AboutPage from "@/pages/about";
 import OrderTrackingPage from "@/pages/orders/order-tracking";
 import OrdersPage from "@/pages/orders/orders";
 import ProductDetailPage from "@/pages/product-detail";
@@ -28,6 +31,9 @@ export const PUBLIC_ROUTES = {
   PRODUCTS: "/products",
   PRODUCT_DETAIL: "/products/:slug",
   SEARCH_RESULTS: "/search-results",
+  TERMS: "/terms",
+  PRIVACY: "/privacy",
+  ABOUT: "/about",
 };
 
 export const PROTECTED_ROUTES = {
@@ -75,6 +81,18 @@ export const publicRoutesPaths = [
   {
     path: PUBLIC_ROUTES.SEARCH_RESULTS,
     element: SearchResultPage,
+  },
+  {
+    path: PUBLIC_ROUTES.TERMS,
+    element: TermsAndConditionsPage,
+  },
+  {
+    path: PUBLIC_ROUTES.PRIVACY,
+    element: PrivacyPolicyPage,
+  },
+  {
+    path: PUBLIC_ROUTES.ABOUT,
+    element: AboutPage,
   },
 ];
 

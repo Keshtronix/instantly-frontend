@@ -26,13 +26,13 @@ const Footer = () => {
       <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-4 px-4 py-6 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
         <Logo />
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
-          <Link to={PUBLIC_ROUTES.PRODUCTS} className="hover:text-foreground">
-            Products
+          <Link to={PUBLIC_ROUTES.ABOUT} className="hover:text-foreground">
+            About
           </Link>
-          <Link to={"#"} className="hover:text-foreground">
+          <Link to={"privacy"} className="hover:text-foreground">
             Privacy Policy
           </Link>
-          <Link to={"#"} className="hover:text-foreground">
+          <Link to={"terms"} className="hover:text-foreground">
             Terms of Service
           </Link>
         </div>

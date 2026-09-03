@@ -6,6 +6,7 @@ import type {
   CreateAddressInput,
   AddressResponse,
   GetAddressesResponse,
+  ForgotPasswordType,
 } from "@/types/auth.type";
 import type {
   CreateOrderInput,
@@ -522,3 +523,7 @@ export const deleteSubCategoryMutationFn = async (id: string): Promise<any> => {
   const response = await API.delete(ROUTES.ADMIN_SUB_CATEGORY_DETAIL(id));
   return response.data;
 };
+
+
+export const forgotPasswordMutationFn = async (data: ForgotPasswordType) =>
+  (await API.post("/auth/forgot-password", data)).data;

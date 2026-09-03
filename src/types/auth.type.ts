@@ -10,6 +10,15 @@ export type RegisterType = {
   avatar?: string;
 };
 
+export type ForgotPasswordType = {
+  email: string;
+};
+
+export type ResetPasswordType = {
+  token: string;
+  password: string;
+};
+
 export type AuthUser = {
   _id: string;
   name: string;
@@ -25,6 +34,10 @@ export type AuthUser = {
 export type AuthResponse = {
   message: string;
   user: AuthUser;
+};
+
+export type MessageResponse = {
+  message: string;
 };
 
 export type AddressType = {
