@@ -6,12 +6,13 @@ import { getProductsQueryFn } from "@/lib/api";
 import { ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const ProductSections = () => {
+const TopRatedProducts = () => {
   const { data, isLoading } = useQuery({
-    queryKey: ["more-products"],
-    queryFn: () => getProductsQueryFn({ limit: 12, sort: "best-match" }),
+    queryKey: ["top-rated-products"],
+    queryFn: () =>
+      getProductsQueryFn({ limit: 12, sort: "highest-rating" }),
   });
-  
+
   const products = data?.products ?? [];
 
   if (isLoading) {
@@ -39,13 +40,12 @@ const ProductSections = () => {
     return null;
   }
 
-
   return (
     <section className="flex flex-col gap-5 py-8">
       <div className="flex items-center justify-between gap-4">
-        <h2 className="text-2xl font-semibold text-foreground">New Arrivals</h2>
+        <h2 className="text-2xl font-semibold text-foreground">Recommended</h2>
         <Link
-          to={PUBLIC_ROUTES.PRODUCTS}
+          to={`${PUBLIC_ROUTES.PRODUCTS}?sort=highest-rating`}
           className="inline-flex items-center gap-1 text-sm font-medium text-foreground underline-offset-4 hover:underline"
         >
           See more
@@ -55,20 +55,20 @@ const ProductSections = () => {
 
       <div className="grid grid-cols-2 gap-x-5 gap-y-8 md:grid-cols-3 lg:grid-cols-4">
         {products.map((product) => (
-          <ProductCard 
-              key={product._id} 
-              id={product._id}
-              slug={product.slug}
-              imageUrl={product.images?.[0] || ""}
-              name={product.name}
-              salePrice={product.salePrice}
-              originalPrice={product.originalPrice}
-              discountPercent={product.discountPercent}
-              discountLabel={product.discountLabel || ""}
-              ratingAverage={product.ratingAverage}
-              reviewCount={product.reviewCount}
-              unit={product.unit}
-              stockCount={product.stockCount}
+          <ProductCard
+            key={product._id}
+            id={product._id}
+            slug={product.slug}
+            imageUrl={product.images?.[0] || ""}
+            name={product.name}
+            salePrice={product.salePrice}
+            originalPrice={product.originalPrice}
+            discountPercent={product.discountPercent}
+            discountLabel={product.discountLabel || ""}
+            ratingAverage={product.ratingAverage}
+            reviewCount={product.reviewCount}
+            unit={product.unit}
+            stockCount={product.stockCount}
           />
         ))}
       </div>
@@ -76,4 +76,4 @@ const ProductSections = () => {
   );
 };
 
-export default ProductSections;
+export default TopRatedProducts;

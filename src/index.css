@@ -121,8 +121,8 @@
   --foreground: oklch(0.18 0.01 160);
   --card: oklch(0.98 0.01 100);
   --card-foreground: oklch(0.18 0.01 160);
-  --btn-cart: oklch(0.18 0.01 160 / 0.8);
-  --btn-cart-hover: oklch(0.18 0.01 160 / 0.9);
+  --btn-cart:  oklch(0.18 0.01 160 / 0.9);
+  --btn-cart-hover: oklch(0.18 0.01 160 / 0.8);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.18 0.01 160);
   /* --primary: oklch(0.28 0.10 160); */

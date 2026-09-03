@@ -118,22 +118,20 @@ const ProductCard = ({
             <p className="line-clamp-1 text-sm text-neutral-500">{unit}</p>
           )}
 
-          {ratingAverage > 0 && (
-            <div className="flex items-center gap-1 text-sm leading-none">
-              <span className="flex text-black" aria-hidden="true">
-                {Array.from({ length: 5 }).map((_, index) => (
-                  <Star
-                    key={index}
-                    className={cn(
-                      "size-3.5 fill-current stroke-current",
-                      index >= ratingAverage && "text-neutral-300",
-                    )}
-                  />
-                ))}
-              </span>
-              <span className="text-neutral-500">({reviewCount})</span>
-            </div>
-          )}
+          <div className="flex items-center gap-1 text-sm leading-none">
+            <span className="flex text-black" aria-hidden="true">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <Star
+                  key={index}
+                  className={cn(
+                    "size-3.5 fill-current stroke-current",
+                    index >= ratingAverage && "text-neutral-300",
+                  )}
+                />
+              ))}
+            </span>
+            <span className="text-neutral-500">({reviewCount})</span>
+          </div>
 
           <div className="flex items-center gap-2 pt-0.5">
             <span className="text-lg font-bold text-black">
