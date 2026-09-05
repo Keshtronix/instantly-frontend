@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { useCart } from "@/hooks/use-cart";
 import { cn } from "@/lib/utils";
-import { getStockDisplay, splitPrice } from "@/utils/helper";
+import { getStockDisplay } from "@/utils/helper";
 import { BanIcon, Plus, Star, TriangleAlert, Truck } from "lucide-react";
 import type { MouseEvent } from "react";
 import { Link } from "react-router-dom";

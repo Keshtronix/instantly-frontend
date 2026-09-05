@@ -8,12 +8,12 @@ const storyStats = [
   { value: "5+", label: "Years of trust" },
 ];
 
-const missionStats = [
-  { value: "2020", label: "Founded" },
-  { value: "25+", label: "Team size" },
-  { value: "4.8 ★", label: "Avg. rating" },
-  { value: "< 2%", label: "Return rate" },
-];
+// const missionStats = [
+//   { value: "2020", label: "Founded" },
+//   { value: "25+", label: "Team size" },
+//   { value: "4.8 ★", label: "Avg. rating" },
+//   { value: "< 2%", label: "Return rate" },
+// ];
 
 const values = [
   {
